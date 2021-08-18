@@ -1,4 +1,4 @@
-#Client.py subscribe -> portalClient.py
+#Client.py subscribe -> mqtt -> portalClient.py
 
 import socket                          # Import socket module
 
