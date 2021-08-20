@@ -1,89 +1,92 @@
-#Client.py subscribe -> mqtt -> portalClient.py
+#client.py subscribe -> socket -> portalClient.py
+
 import base64
-#import codecs
-#import pickle
-import socket                          # Import socket module
+import socket
+import time
 
-s = socket.socket()                    # Create a socket object
-host = socket.gethostname()            # Get local machine name
-port = 12345                           # Reserve a port for your service.
-
+s = socket.socket()
+host = socket.gethostname()
+port = 12345
+#conecta um soquete de cliente baseado em TCP a
+#um soquete de servidor baseado em TCP.
 s.connect((host, port))
 
-def menu():
-    print('========MENU DO CLIENTE======\n')
-    print('1. Nova Tarefa\n')
-    print('2. Alterar tarefa existente\n')
-    print('3. Listar todas as tarefas\n')
-    print('4. Excluir tarefa existente\n')
-    print('5. Excluir todas as tarefas\n')
-    print('6. Sair\n')
-    opcao = input('\nDigite uma das opções acima: ')
-    return opcao
+banco = dict()
 
 
-def validaID():
-    while True:
-        usrid = input('Digite seu ID: ')
-        if not usrid.isdigit():
-            print('ID precisa ser numerico')
-        else:
-            break
-    return usrid
+while True:
+    #Recebe Menu
+    menu = s.recv(1024)
+    print(menu.decode())
 
+    #Envia opção escolhida
+    num = input('\nDigite a opção: ')
+    opcao = str(num)
+    s.send(opcao.encode())
 
-def run():
+    if opcao == '1':
+        #1. Nova Tarefa
+        op1 = s.recv(1024)
+        print(op1.decode())
+        titulo = input()
+        s.send(titulo.encode())
 
-    while True:
-        opcao = menu()
+        op1 = s.recv(1024)
+        print(op1.decode())
+        tarefa = input()
+        s.send(tarefa.encode())
 
-        #s.send(opcao.encode())
+        #Apenas um exemplo pra teste o trecho abaixo vai para o portalAdmin
+        base64_task = s.recv(1024)
+        decode_task = eval(base64.b64decode(base64_task))
 
-        if opcao == '1':
-            usrid = validaID()
-            titulo = input('Titulo da Tarefa: ')
-            tarefa = input('Descrição da Tarefa: ')
+        print('Dados Cadastrados: ', decode_task)
+        break
+    elif opcao == '2':
+        #2. Alterar tarefa existente
+        op2 = s.recv(1024)
+        print(op2.decode())
+        alterTask = input()
+        break
+    elif opcao == '3':
+        #3. Listar todas as tarefas
+        op3 = s.recv(1024)
+        print(op3.decode())
+        listTask = input()
+        break
+    elif opcao == '4':
+        #4. Excluir tarefa existente
+        op4 = s.recv(1024)
+        print(op4.decode())
+        removeTask = input()
+        break
+    elif opcao == '5':
+        #5. Excluir todas as tarefas
+        op5 = s.recv(1024)
+        print(op5.decode())
+        delTask = input()
+        break
+    elif opcao == '6':
+        #6. Sair
+        op6 = s.recv(1024)
+        print(op6.decode())
+        exitTask = input()
+        break
+s.close()
 
-            dataTask = {'ID': usrid,'TITULO': titulo,'TAREFA': tarefa}
+#server.py
+#!/usr/bin/python                           # This is server.py file
 
-            s.send(str(dataTask).encode('utf-8'))
+#import socket                               # Import socket module
 
-            #DECODIFICANDO PARA VER SE CODIFICOU
-            #base64_dict = base64.b64encode(encoded_dict)
-            #print(encoded_dict)
+#s = socket.socket()                         # Create a socket object
+#host = socket.gethostname()                 # Get local machine name
+#port = 12345                                # Reserve a port for your service.
+#s.bind((host, port))                        # Bind to the port
 
-#my_dict = {'name': 'Rajiv Sharma', 'designation': "Technology Supervisor"}
-#encoded_dict = str(my_dict).encode('utf-8')
-#base64_dict = base64.b64encode(encoded_dict)
-#print(base64_dict)
-
-#my_dict_again = eval(base64.b64decode(base64_dict))
-#print(my_dict_again)
-
-        else:
-            break
-
-        data = s.recv(1024)
-        print("\nMensagem recebida: ",data.decode())
-
-
-    print('\nFechando conexão do Cliente')
-    s.close()                              # Close the socket when done
-
-run()
-
-
-#client.py
-
-#!/usr/bin/python                      # This is client.py file
-
-#import socket                          # Import socket module
-
-#s = socket.socket()                    # Create a socket object
-#host = socket.gethostname()            # Get local machine name
-#port = 12345                           # Reserve a port for your service.
-
-#s.connect((host, port))
-#data = s.recv(1024)
-#print(data.decode())
-#s.close()
+#s.listen(5)                                 # Now wait for client connections.
+#while True:
+#   c, addr = s.accept()                     # Establish connection with client.
+#   print('Got connection from', addr)
+#   c.send('Thank you for connecting'.encode())
+#   c.close()                                # Close the connection
