@@ -22,11 +22,10 @@ def validaID():
 
 
 def run():
-    s.listen(5)
     while True:
+        s.listen(5)
         c, addr = s.accept()
         print('Got connection from', addr)
-
         #Envia Menu
         c.send('=======PORTAL DO CLIENTE=======\n1. Nova Tarefa\n2. Alterar tarefa existente\n3. Listar todas as tarefas\n4. Excluir tarefa existente\n5. Excluir todas as tarefas\n6. Sair'.encode())
         #c.send('Opcao: '.encode())
@@ -36,6 +35,7 @@ def run():
 
         if opcao == '1':
             #1. Nova Tarefa
+            print('[OK] Opção selecionada: '+opcao+'.Nova Tarefa')
             c.send('Titulo da Tarefa: '.encode())
             op1 = c.recv(1024)
             titulo = op1.decode()
@@ -57,30 +57,57 @@ def run():
 
         elif opcao == '2':
             #2. Alterar tarefa existente
-            c.send('Titulo da Tarefa: '.encode())
-            op2 = c.recv(1024)
-            alterTask = op2.decode()
+            #recebe o nro da tarefa que deseja alterar
+            #portalAdmin deve receber essa tarefa e fazer a alteração
+            print('[OK] Opção selecionada: '+opcao+'.Alterar tarefa existente')
+            loop = True
+            while loop:
+                c.send('Digite a ID da Tarefa: '.encode())
+                op2 = c.recv(1024)
+                numTask = op2.decode()
+                #numTask = alterTask
+
+                if not numTask.isdigit():
+                    print('[ERRO]: '+numTask+' não corresponde ao valor de uma ID.')
+                    c.send('[ERRO] Favor inserir um valor numérico para a ID: '.encode())
+                    flag = 'True'
+                    c.send(flag.encode())
+                else:
+                    print('[OK] ID recebida com sucesso')
+                    flag = 'False'
+                    loop = False
+                    c.send(flag.encode())
+
         elif opcao == '3':
             #3. Listar todas as tarefas
-            c.send('Titulo da Tarefa: '.encode())
+            #receber do portalAdmin um dicionario com todos as tarefas
+            print('[OK] Opção selecionada: '+opcao+'.Listar todas as tarefas')
+            c.send('Segue todas as tarefas abaixo: '.encode())
             op3 = c.recv(1024)
             listTask = op3.decode()
         elif opcao == '4':
             #4. Excluir tarefa existente
-            c.send('Titulo da Tarefa: '.encode())
+            print('[OK] Opção selecionada: '+opcao+'.Excluir tarefa existente')
+            c.send('Informe a ID da Tarefa a ser excluida: '.encode())
             op4 = c.recv(1024)
             removeTask = op4.decode()
         elif opcao == '5':
             #5. Excluir todas as tarefas
-            c.send('Titulo da Tarefa: '.encode())
+            print('[OK] Opção selecionada: '+opcao+'.Excluir todas as tarefas')
+            c.send('Deseja realmente excluit todas as tarefas?'.encode())
             op5 = c.recv(1024)
             delTask = op5.decode()
         elif opcao == '6':
             #6. Sair
-            c.send('Titulo da Tarefa: '.encode())
+            print('[OK] Opção selecionada: '+opcao+'.Sair')
+            c.send('Deseja realmente encerrar a conexão?\n1.SIM | 2.NÃO\n'.encode())
             op6 = c.recv(1024)
             exitTask = op6.decode()
+
+            c.close()
     print('\nFechando conexão do Cliente')
+
+
 run()
 
  # EXEMPLO
@@ -92,7 +119,7 @@ run()
  #my_dict_again = eval(base64.b64decode(base64_dict))
  #print(my_dict_again)
 
- 
+
 #client.py
 
 #!/usr/bin/python                      # This is client.py file

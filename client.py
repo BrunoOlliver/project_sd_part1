@@ -46,7 +46,17 @@ while True:
         #2. Alterar tarefa existente
         op2 = s.recv(1024)
         print(op2.decode())
-        alterTask = input()
+        loop = True
+        while loop:
+            alterTask = input('ID da Tarefa: ')
+            numTask = str(alterTask)
+            s.send(numTask.encode())
+            rspFlag = s.recv(1024)
+            flag = rspFlag.decode()
+            if flag =='False':
+                loop = False
+            else:
+                print(rspFlag.decode())
         break
     elif opcao == '3':
         #3. Listar todas as tarefas
@@ -59,6 +69,8 @@ while True:
         op4 = s.recv(1024)
         print(op4.decode())
         removeTask = input()
+
+        s.send(removeTask.encode())
         break
     elif opcao == '5':
         #5. Excluir todas as tarefas
@@ -71,8 +83,7 @@ while True:
         op6 = s.recv(1024)
         print(op6.decode())
         exitTask = input()
-        break
-s.close()
+        s.close()
 
 #server.py
 #!/usr/bin/python                           # This is server.py file
