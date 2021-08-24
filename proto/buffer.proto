@@ -1,0 +1,44 @@
+syntax="proto2";
+
+package Client;
+
+service Greeter {
+
+  rpc SayHello (HelloRequest) returns (HelloReply) {}
+  rpc SayHelloAgain (HelloRequest) returns (HelloReply) {}
+  rpc insertNewClient (InsertRequest) returns (HelloReply) {}
+  rpc updateClient (ModifyRequest) returns (HelloReply) {}
+  rpc findClient (FindRequest) returns (HelloReply) {}
+  rpc deleteClient (DeleteRequest) returns (HelloReply) {}
+}
+
+//Responde a mensagem dentro do greeting
+message HelloReply{
+  repeated string message = 1;
+}
+
+message HelloRequest{
+  repeated string name = 1;
+}
+
+// Insere novo cliente
+message InsertRequest {
+  repeated int32 id = 1;
+  repeated string name = 2;
+}
+
+// Modifica cliente existente
+message ModifyRequest {
+  repeated int32 id = 1;
+  repeated string name = 2;
+}
+
+// Localiza Cliente
+message FindRequest {
+  repeated int32 id = 1;
+}
+
+// Remove Cliente
+message DeleteRequest {
+  repeated int32 id = 1;
+}

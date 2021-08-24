@@ -3,87 +3,108 @@
 import base64
 import socket
 import time
+import os
 
-s = socket.socket()
-host = socket.gethostname()
-port = 12345
-#conecta um soquete de cliente baseado em TCP a
-#um soquete de servidor baseado em TCP.
-s.connect((host, port))
+def clean():
+    os.system('cls')
 
-banco = dict()
+loop1 = True
+while loop1:
+    try:
+        s = socket.socket()
+        host = socket.gethostname()
+        port = 12345
+        s.connect((host, port))
 
+        banco = dict()
+        contador = 0
 
-while True:
-    #Recebe Menu
-    menu = s.recv(1024)
-    print(menu.decode())
+        loop2 = True
+        while loop2:
 
-    #Envia opção escolhida
-    num = input('\nDigite a opção: ')
-    opcao = str(num)
-    s.send(opcao.encode())
+            #print('volta ',contador)
+            #Recebe Menu
+            menu = s.recv(1024)
+            print(menu.decode())
 
-    if opcao == '1':
-        #1. Nova Tarefa
-        op1 = s.recv(1024)
-        print(op1.decode())
-        titulo = input()
-        s.send(titulo.encode())
+            #Envia opção escolhida
+            num = input('\nDigite a opção: ')
+            opcao = str(num)
+            s.send(opcao.encode())
 
-        op1 = s.recv(1024)
-        print(op1.decode())
-        tarefa = input()
-        s.send(tarefa.encode())
+            if opcao == '1':
+                clean()
+                #1. Nova Tarefa
+                op1 = s.recv(1024)
+                print(op1.decode())
+                titulo = input()
+                s.send(titulo.encode())
 
-        #Apenas um exemplo pra teste o trecho abaixo vai para o portalAdmin
-        base64_task = s.recv(1024)
-        decode_task = eval(base64.b64decode(base64_task))
+                op1 = s.recv(1024)
+                print(op1.decode())
+                tarefa = input()
+                s.send(tarefa.encode())
 
-        print('Dados Cadastrados: ', decode_task)
-        break
-    elif opcao == '2':
-        #2. Alterar tarefa existente
-        op2 = s.recv(1024)
-        print(op2.decode())
-        loop = True
-        while loop:
-            alterTask = input('ID da Tarefa: ')
-            numTask = str(alterTask)
-            s.send(numTask.encode())
-            rspFlag = s.recv(1024)
-            flag = rspFlag.decode()
-            if flag =='False':
-                loop = False
-            else:
-                print(rspFlag.decode())
-        break
-    elif opcao == '3':
-        #3. Listar todas as tarefas
-        op3 = s.recv(1024)
-        print(op3.decode())
-        listTask = input()
-        break
-    elif opcao == '4':
-        #4. Excluir tarefa existente
-        op4 = s.recv(1024)
-        print(op4.decode())
-        removeTask = input()
+                #Apenas um exemplo pra teste o trecho abaixo vai para o portalAdmin
+                base64_task = s.recv(1024)
+                decode_task = eval(base64.b64decode(base64_task))
 
-        s.send(removeTask.encode())
-        break
-    elif opcao == '5':
-        #5. Excluir todas as tarefas
-        op5 = s.recv(1024)
-        print(op5.decode())
-        delTask = input()
-        break
-    elif opcao == '6':
-        #6. Sair
-        op6 = s.recv(1024)
-        print(op6.decode())
-        exitTask = input()
+                print('\nDados Cadastrados: ')
+                for x,y in decode_task.items():
+                    print(x,y)
+                #break
+            elif opcao == '2':
+                clean()
+                #2. Alterar tarefa existente
+
+                loop3 = True
+                while loop3:
+                    op2 = s.recv(1024)
+                    print(op2.decode())
+                    idTask = input()
+                    numTask = str(idTask)
+                    s.send(numTask.encode())
+
+                    rspFlag = s.recv(1024)
+                    flag = rspFlag.decode()
+
+                    if flag =='False':
+                        loop3 = False
+                    else:
+                        print(rspFlag.decode())
+                #break
+            elif opcao == '3':
+                clean()
+                #3. Listar todas as tarefas
+                op3 = s.recv(1024)
+                print(op3.decode())
+                listTask = input()
+                break
+            elif opcao == '4':
+                clean()
+                #4. Excluir tarefa existente
+                op4 = s.recv(1024)
+                print(op4.decode())
+                removeTask = input()
+
+                s.send(removeTask.encode())
+                break
+            elif opcao == '5':
+                clean()
+                #5. Excluir todas as tarefas
+                op5 = s.recv(1024)
+                print(op5.decode())
+                delTask = input()
+                break
+            elif opcao == '6':
+                #6. Sair da Tarefa
+                loop1 = False
+                break
+
         s.close()
+    except ConnectionError:
+        print('[ERRO] Conexão com o servidor não disponível')
+
 
 #server.py
 #!/usr/bin/python                           # This is server.py file
