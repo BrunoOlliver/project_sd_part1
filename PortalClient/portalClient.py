@@ -41,7 +41,13 @@ def customer_portal(c, addr):
     print('[CONNECTED] Conexão estabelecida: ', addr)
     try:
         while True:
-            c.send('\n\n=======PORTAL DO CLIENTE=======\n1. Nova Tarefa\n2. Alterar tarefa existente\n3. Listar todas as tarefas\n4. Excluir tarefa existente\n5. Excluir todas as tarefas\n6. Sair'.encode())
+            c.send('\n\n=======PORTAL DO CLIENTE=======\n'+
+                  '1. Nova Tarefa\n'+
+                  '2. Alterar tarefa existente\n'+
+                  '3. Listar todas as tarefas\n'+
+                  '4. Excluir tarefa existente\n'+
+                  '5. Excluir todas as tarefas\n'+
+                  '6. Sair'.encode())
             num = c.recv(1024)
             opcao = num.decode()
 
@@ -64,8 +70,11 @@ def customer_portal(c, addr):
                 #teste com cliente funciona
                 #proximo passo: enviar via mosquito para portal Admin
                 encoded_task = str(newTask).encode('utf-8')
+
                 base64_task = base64.b64encode(encoded_task)
                 c.send(base64_task)
+
+                banco = {id:base64_task}
 
             elif opcao == '2':
                 #2. Alterar tarefa existente

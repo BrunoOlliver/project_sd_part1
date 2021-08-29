@@ -1,0 +1,101 @@
+// Copyright 2015 gRPC authors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package portal;
+
+// The greeting service definition.
+service Greeter {
+  // Sends a greeting
+  rpc Connecting (ConectRequest) returns (ConectReply) {}
+  rpc CheckUser (AdministratorRequest) returns (AdministratorReplay) {}
+  rpc CheckOption (OptionRequest) returns (OptionReplay) {}
+  rpc InsertNewClient (InsertClientRequest) returns (InsertClientReplay) {}
+  rpc SearchClient (SearchClientRequest) returns (SearchClientReplay) {}
+  rpc ListClients (ListClientsRequest) returns (ListClientsReplay) {}
+  rpc DeleteClient (DeleteClientRequest) returns (DeleteClientReplay) {}
+  rpc RemoveClients (RemoveClientsRequest) returns (RemoveClientsReplay) {}
+}
+
+// The request message containing the user's name.
+message ConectRequest {
+  string message = 1;
+}
+
+// The response message containing the greetings
+message ConectReply {
+  string message = 1;
+}
+
+message RemoveClientsRequest{
+  string message = 1;
+}
+
+message RemoveClientsReplay {
+  string message = 1;
+}
+
+message DeleteClientRequest {
+  int32 id = 1;
+  string name = 2;
+}
+
+message DeleteClientReplay {
+  string message = 1;
+}
+
+message ListClientsRequest {
+  string message = 1;
+}
+
+message ListClientsReplay {
+  string message = 1;
+}
+
+message SearchClientRequest {
+  int32 id = 1;
+  string name = 2;
+}
+
+message SearchClientReplay {
+  string message = 1;
+}
+
+
+message InsertClientRequest {
+  int32 id = 1;
+  string name = 2;
+}
+
+message InsertClientReplay {
+  string message = 1;
+}
+
+message AdministratorRequest {
+  int32 id = 1;
+  string name = 2;
+}
+
+message AdministratorReplay {
+  string message = 1;
+}
+
+message OptionRequest {
+  int32 option = 1;
+}
+
+message OptionReplay {
+  string message = 1;
+}

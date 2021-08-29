@@ -49,6 +49,8 @@ while loop1:
                 base64_task = s.recv(1024)
                 decode_task = eval(base64.b64decode(base64_task))
 
+                print(base64_task)
+
                 print('\nDados Cadastrados: ')
                 for x,y in decode_task.items():
                     print(x,y)
