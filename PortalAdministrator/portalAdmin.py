@@ -1,18 +1,3 @@
-# Copyright 2015 gRPC authors.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-"""The Python implementation of the GRPC portal.Greeter server."""
-
 from concurrent import futures
 import logging
 import socket
@@ -23,12 +8,10 @@ import portal_pb2
 import portal_pb2_grpc
 
 ntask = dict()
-dic_adm = {'ID':'12345','NAME':'JOAO'}
+dic_adm = {'ID':'12345','NAME':'ADMIN'}
 dic_client = {'ID':'12345','NAME':'JOAO','TASK':ntask}
 banco_adm = {dic_adm['ID']:dic_adm}
 banco_client = {dic_client['ID']:dic_client}
-
-print(banco_client)
 
 def menu():
     menu ='''\n=======PORTAL DO ADMINISTRADOR=======\n
@@ -116,10 +99,6 @@ class Greeter(portal_pb2_grpc.GreeterServicer):
     def Connecting(self, request, context):
         print('[CONNECTED] Host: %s' %request.message)
         return portal_pb2.ConectReply(message='Conexão Estabelecida com sucesso!')
-
-
-
-
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
