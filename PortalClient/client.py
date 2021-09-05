@@ -1,4 +1,3 @@
-#client.py subscribe -> socket -> portalClient.py
 
 import base64
 import socket

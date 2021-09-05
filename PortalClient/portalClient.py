@@ -1,4 +1,4 @@
-#portalClient.py publish -> mqtt -> portalAdmin
+
 import base64
 import socket
 import threading
